@@ -67,7 +67,7 @@ services:
     user: 2004:2000
     container_name: appdaemon
     build:
-      dockerfile: AppDaemon.Dockerfile
+      dockerfile: appdaemon/Dockerfile
       context: .
     networks:
       internal:
@@ -86,7 +86,7 @@ services:
     # requires root to run port 445
     container_name: samba
     build:
-      dockerfile: nas.Dockerfile
+      dockerfile: samba/Dockerfile
       context: .
     ports:
       - 445:445
@@ -101,9 +101,9 @@ services:
 
   debugger:
     # NOTE: run as root with sshd (only run under debug mode)
-    container_name: vscode
+    container_name: debugger
     build:
-      dockerfile: debugger.Dockerfile
+      dockerfile: debugger/Dockerfile
       context: .
     networks:
       internal:
@@ -118,3 +118,25 @@ services:
       - nas-data:/vol/nasdata
       - debugger-git:/vol
     restart: no
+
+  # scanner:
+  #   container_name: scanner
+  #   build:
+  #     dockerfile: scanner.Dockerfile
+  #     context: .
+  #   networks:
+  #     internal:
+  #   privileged: true
+
+  # grocy:
+  #   image: linuxserver/grocy:arm32v7-latest
+  #   container_name: grocy
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - grocy-config:/config
+  #   ports:
+  #     - 8000:80
+  #   restart: unless-stopped
