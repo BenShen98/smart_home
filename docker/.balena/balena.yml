@@ -1,0 +1,7 @@
+build-secrets:
+  services:
+    nas:
+    - source: secrets_nas_bots
+      dest: nas_bots
+    - source: secrets_nas_users
+      dest: nas_users

@@ -6,6 +6,7 @@ volumes:
   ha-config:
   z2m-config:
   grocy-config:
+  nas-config:
   nas-data:
   debugger-git:
 
@@ -95,6 +96,7 @@ services:
       internal:
     volumes:
       - nas-data:/data
+      - nas-config:/etc/samba
 
     environment:
       - TZ=Europe/London
@@ -115,6 +117,7 @@ services:
       - ha-config:/vol/ha-config
       - z2m-config:/vol/z2m-config
       - grocy-config:/vol/grocy-config
+      - nas-config:/vol/nas-config
       - nas-data:/vol/nasdata
       - debugger-git:/vol
     restart: no
