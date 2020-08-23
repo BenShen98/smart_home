@@ -5,11 +5,12 @@ RUN apt-get update && \
     apt-get clean
 
 RUN mkdir /var/run/sshd && \
-    install -d ~/.ssh -m 755 && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config && \
     sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
+    # setup host key
     ssh-keygen -A && \
-    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    # setup ssh key folder
+    install -d ~/.ssh -m 755
 
 # SSH login fix. Otherwise user is kicked off after login
 # NOTE: Find not needed, but commented here in case required in the future
@@ -17,6 +18,6 @@ RUN mkdir /var/run/sshd && \
 
 EXPOSE 22
 
-CMD $(umask 077 && echo "$PUBKEY" > ~/.ssh/authorized_keys ) && \
+CMD $(umask 077 && cd ~/.ssh && echo "$AUTHED_KEY" > authorized_keys && printf -- "$GIT_RSA" > id_rsa && echo "$GIT_RSA_PUB" > id_rsa.pub ) && \
     git config --global user.name "$GIT_NAME" && git config --global user.email "$GIT_EMAIL" &&\
     /usr/sbin/sshd -D
